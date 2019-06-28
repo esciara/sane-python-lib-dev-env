@@ -152,9 +152,10 @@ but I am quite happy with the former.
 
 * Set up as external tools:
 
-  * |black PyCharm/Intellij IDEA integration|_.
-  * |pylint PyCharm/Intellij IDEA integration|_.
-  * |isort PyCharm/Intellij IDEA integration|_.
+  * |black PyCharm/Intellij IDEA integration|_. (as an external tool)
+  * |flake8 PyCharm/Intellij IDEA integration|_. (as an external tool)
+  * |pylint PyCharm/Intellij IDEA integration|_. (as a plugin)
+  * |isort PyCharm/Intellij IDEA integration|_. (as an external tool)
 
 Other useful IDE setup
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -182,6 +183,10 @@ You might find these other plugins useful:
    ``black`` PyCharm/Intellij IDEA integration
 .. _black PyCharm/Intellij IDEA integration:
    https://black.readthedocs.io/en/stable/editor_integration.html#pycharm-intellij-idea
+.. |flake8 PyCharm/Intellij IDEA integration| replace::
+   ``flake8`` PyCharm/Intellij IDEA integration
+.. _flake8 PyCharm/Intellij IDEA integration:
+   https://foxmask.net/post/2016/02/17/pycharm-running-flake8/
 .. |pylint PyCharm/Intellij IDEA integration| replace::
    ``pylint`` PyCharm/Intellij IDEA integration
 .. _pylint PyCharm/Intellij IDEA integration:
