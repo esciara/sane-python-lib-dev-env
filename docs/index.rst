@@ -1,10 +1,11 @@
-Welcome to sane-python-lib-dev-env's documentation!
-===================================================
+Searching for a Sane Python Library Development Environment
+===========================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
+   intro
    presentation
    setup
 

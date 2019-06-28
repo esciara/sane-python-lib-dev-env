@@ -1,15 +1,5 @@
-Searching for a sane python development environment
-===================================================
-
-Introduction
-------------
-
-As I decided to write a python package of my own, I found myself facing of a multitude of different
-python tools, from packaging to development/deployment tasks managing. And I found it quite overwhelming.
-
-As a former developer and as an agile coach, I always found it key to have a good, sane, helping set of tools
-to systemically ensure quality and consistency in the code and development work. No less key is the capacity
-to automate as far as possible the integration and deployment of packages and software.
+Tools and Approach
+==================
 
 .. note::
     TO CHANGE:
@@ -22,176 +12,237 @@ to automate as far as possible the integration and deployment of packages and so
     * Étienne Bersac's `Débuter avec Python en 2019`_
       (french), seen as a link from Sam (& Max)'s `Stack Python en 2019`_ (french)
 
+
+TL;DR: Tools used
+-----------------
+
+Python versions installation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* |pyenv|_: used to make available various python version on the same platform.
+
+
+Python dependencies, packaging, publishing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* |poetry|_: preferred over ``pipenv`` or the combination of ``pip`` and ``setuptools``
+
+.. note::
     The two articles that definitely tipped the balance to go with ``poetry`` are:
 
     * `Poetically Packaging Your Python Project`_
     * `A deeper look into Pipenv and Poetry`_
 
-.. |project-template-python| replace:: ``project-template-python``
-.. _project-template-python: https://github.com/thejohnfreeman/project-template-python
-.. _Débuter avec Python en 2019: https://bersace.cae.li/conseils-python-2019.html
-.. _Stack Python en 2019: http://sametmax.com/stack-python-en-2019/
-.. _Poetically Packaging Your Python Project: https://hackersandslackers.com/poetic-python-project-packaging/
-.. _A deeper look into Pipenv and Poetry: https://frostming.com/2019/01-04/pipenv-poetry
 
-Tools used
-----------
+Unused ``poetry`` features
+++++++++++++++++++++++++++
 
-Python environment management
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* *Development dependencies* are only used to the bare minimum. (|tox|_, |tox-pyenv|_,
+  |commitizen|_ and |pre-commit|_) ``extras`` are used instead, alongside with
+  |tox|_ for task management.
+* *Version bumping* feature is rather limited compared to what is already available
+  through |python-semantic-release|_.
 
-* |pyenv|_ used to make available various python version on the same platform.
-* ``pyenv-virtualenv`` to create with- and centralise in ``pyenv`` all virtual envrionments.
-  (even though the heavy use of ``tox`` and ``poetry`` will limit the usefulness of these
-  virtual environments)
 
-.. |pyenv| replace:: ``pyenv``
-.. _pyenv: http://bbc.com
+Multi-environment testing (local) and task management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Python dependencies, packaging, publishing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* |tox|_: (along with |tox-pyenv|_) will be handling running the tests and qa checks,
+  except for ``pre-commit`` hooks.
 
-* ``poetry``
+Testing suites
+~~~~~~~~~~~~~~
 
-Available features not used:
+* |pytest|_: for unit testing.
+* |behave|_: for functional testing.
 
-* development dependencies (apart from installing ``tox``), which will be handled by ``tox``.
-* version bumping, which is handled by ``python-semantic-release``.
 
-Running tests and qa tasks
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+QA Tools
+~~~~~~~~
 
-* ``tox`` (along with ``tox-pyenv``, and ``tox-virtualenv-no-download``) will be handling the tests
-  and qa tasks, except for pre-commit hooks.
+* |black|_: to end arguments about code formatting.
+* |isort|_: to sort import properly.
+* |flake8|_: for linting. It should be less and less needed thanks to ``black``.
 
-Packages used for testing and qa:
+  * used in combination with |flake8-bugbear|_ to apply ``B950`` to follow |black's
+    recommendations regarding line length handling by flake8|_.
 
-* ``pytest``
-* ``behave``
-* ``black``
-* ``isort``
-* ``pyling``
-* ``flake8`` (with ``flake8-bugbear``)
-* ``coverage``
+* |pylint|_: for (further) linting. (see note below)
+* |mypy|_: for static type checking.
+* |coverage|_ for code coverage.
 
-Documentation
-~~~~~~~~~~~~~
+Some of these tools are called during the commit process `pre-commit hooks`_ and
+on-the-fly while developing through `IDE setup`_.
 
-* ``sphinx``
-* Read the docs
+.. note::
+    This `flake8 vs pylint reddit thread comment`_ catches succinctly the differences
+    and advantages of using both ``flake8`` and ``pylint``.
 
-Pre-commit hooks
-~~~~~~~~~~~~~~~~
 
-* ``pre-commit`` package is used to set them up.
 
-Hooks used:
+Versioning, change logs and commit messages readability
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ``gitlint``
-* ``black``
-* ``blacken-docs``
-* ``isort``, helped wigth ``seed-isort-config``
-* some ``pre-commit`` packaged ``pre-commit-hooks``:
-    * ``trailing-whitespace``
-    * ``end-of-file-fixer``
-    * ``check-yaml``
-    * ``debug-statements``
-    * ``flake8`` with ``flake8-bugbear``
-* ``pyupgrade``
-* some ``pre-commit`` packaged ``pygrep-hooks``:
-    * ``rst-backticks``
+* |python-semantic-release|_: to create the change logs and to bump versions following
+  semantic versioning rules
+* |commitizen|_: (the python package, not the javascript version) to create commit
+  comments which are readable.
+* |gitlint|_: to ensure that the commit comment effectively follow the semantic of
+  ``commitizen``.
 
-Commit comments readability, change logs, version bumping with semantic versioning
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* ``commitizen`` (the python package, not the javascript version) to create commit comments which are readable
-* ``gitlint`` to ensure that the commit comment effectively follow the semantic of ``commitizen``
-* ``python-semantic-release`` to create the change logs and to bump versions following semantic versioning rules
 
 Continuous integration and continuous deployment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ``gitlab-ci`` for local CI and release workflow
-* ``travis-ci`` for PR checks on linux (macOS ?)
-* ``appveyor`` for PR checks on windows
+* |gitlab-ci|_: for local CI and release workflow.
+* |travis-ci|_: for PR checks on linux (and macOS ?).
+* |appveyor|_: for PR checks on windows.
 
-IDE and it's setup
-~~~~~~~~~~~~~~~~~~
 
-My IDE of choice is Intellij/Pycharm. I know that Visual Studio Code is gaining momentum,
+.. _pre-commit hooks:
+
+Ensuring quality though pre-commit hooks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* |pre-commit|_, the python tool, is used to set them up.
+
+Hooks used
+++++++++++
+
+* |gitlint|_
+* |black|_
+* |blacken-docs|_
+* |isort|_, helped wigth |seed-isort-config|_
+* some ``pre-commit`` packaged ``pre-commit-hooks``:
+
+  * ``trailing-whitespace``
+  * ``end-of-file-fixer``
+  * ``check-yaml``
+  * ``debug-statements``
+  * ``flake8`` with ``flake8-bugbear``
+
+* |pyupgrade|_
+* some ``pre-commit`` packaged ``pygrep-hooks``:
+
+  * ``rst-backticks``
+
+
+.. _IDE setup:
+
+Ensuring on-the-fly QA though IDE setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+My IDE of choice is Pycharm/Intellij IDEA. I know that Visual Studio Code is gaining momentum,
 but I am quite happy with the former.
 
-Plugins I have added so far:
+* Set up as external tools:
 
-* PyVenv Manage
-* Toml
-* Ini
-* set up as external tools
-    * ``black``
-    * ``pylint``
-    * ``isort``
+  * |black PyCharm/Intellij IDEA integration|_.
+  * |pylint PyCharm/Intellij IDEA integration|_.
+  * |isort PyCharm/Intellij IDEA integration|_.
 
 
-Main tools
-~~~~~~~~~~
 
-+------------------+--------------------------------------------------------------+-----------------+
-| Tool             | Used features                                                | Unused features |
-+==================+==============================================================+=================+
-| ``pyenv``        | install the python environments on your host.                |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``poetry``       | package dependency                                           | versioning      |
-|                  |                                                              |                 |
-|                  | packaging                                                    |                 |
-|                  |                                                              |                 |
-|                  | package publishing                                           |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``invoke``       | running linting                                              |                 |
-|                  |                                                              |                 |
-|                  | running tests                                                |                 |
-|                  |                                                              |                 |
-|                  | generating the doc (sphinx)                                  |                 |
-|                  |                                                              |                 |
-|                  | serve generated doc                                          |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``tox``          | running code tests in multiple pythons environments          |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``bump2version`` | updating version (together with committing and tag creation) |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``black``        | linging: enforcing conformity to PEP8 (-ish)                 |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``isort``        | sorting python imports                                       |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``pylint``       | linting (*usage planned*)                                    |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``flake8``       | linting (*usage planned*)                                    |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``mypy``         | optional static typing (*usage planned*)                     |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``pytest``       | unit testing                                                 |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``coverage``     | coverage (*usage planned*)                                   |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``gitlab-ci``    | local CI pipeline and continuous delivery pipeline           |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``travis-ci``    | pull request CI pipeline on linux and mac                    |                 |
-+------------------+--------------------------------------------------------------+-----------------+
-| ``appveyor``     | pull request CI pipeline on windows                          |                 |
-+------------------+--------------------------------------------------------------+-----------------+
+Other useful IDE setup
+++++++++++++++++++++++
 
-Complementary tools
-~~~~~~~~~~~~~~~~~~~
+You might find these other plugins useful:
 
-+--------------------------------+------------------------------------------------+-----------------+
-| Tool                           | Used features                                  | Unused features |
-+================================+================================================+=================+
-| ``tox-virtualenv-no-download`` | disable virtualenv (>=14)'s downloading        |                 |
-|                                | behaviour when running through tox.            |                 |
-+--------------------------------+------------------------------------------------+-----------------+
-| ``flake8-bugbear``             | B950 to follow `black's recommendations        |                 |
-|                                | regarding line length handling by flake8`_     |                 |
-+--------------------------------+------------------------------------------------+-----------------+
-|                                |                                                |                 |
-+--------------------------------+------------------------------------------------+-----------------+
+* `PyVenv Manage`_: provides a shortcut to manage the Python interpreter of
+  Pycharm/Intellij IDEA projects.
 
-.. _black's recommendations regarding line length handling by flake8: https://black.readthedocs.io/en/stable/the_black_code_style.html#line-length
+
+Documentation
+~~~~~~~~~~~~~
+
+* |sphinx|_: to generate docs, which are then published online on `Read the docs`_.
+
+
+.. |project-template-python| replace:: ``project-template-python``
+.. _project-template-python: https://github.com/thejohnfreeman/project-template-python
+
+.. _Débuter avec Python en 2019: https://bersace.cae.li/conseils-python-2019.html
+.. _Stack Python en 2019: http://sametmax.com/stack-python-en-2019/
+.. _Poetically Packaging Your Python Project:
+    https://hackersandslackers.com/poetic-python-project-packaging/
+.. _A deeper look into Pipenv and Poetry: https://frostming.com/2019/01-04/pipenv-poetry
+
+.. _flake8 vs pylint reddit thread comment:
+    https://
+    www.reddit.com/r/Python/comments/82hgzm/any_advantages_of_flake8_over_pylint/dvai60a/
+
+.. |black PyCharm/Intellij IDEA integration| replace::
+   ``black`` PyCharm/Intellij IDEA integration
+.. _black PyCharm/Intellij IDEA integration:
+   https://black.readthedocs.io/en/stable/editor_integration.html#pycharm-intellij-idea
+.. |pylint PyCharm/Intellij IDEA integration| replace::
+   ``pylint`` PyCharm/Intellij IDEA integration
+.. _pylint PyCharm/Intellij IDEA integration:
+   https://plugins.jetbrains.com/plugin/11084-pylint
+.. |isort PyCharm/Intellij IDEA integration| replace::
+   ``isort`` PyCharm/Intellij IDEA integration
+.. _isort PyCharm/Intellij IDEA integration:
+   https://github.com/timothycrosley/isort/wiki/isort-Plugins
+
+.. _PyVenv Manage: https://plugins.jetbrains.com/plugin/10085-pyvenv-manage
+
+.. _Read the docs: https://www.readthedocs.io/
+
+.. |black's recommendations regarding line length handling by flake8| replace::
+   ``black``'s recommendations regarding line length handling by ``flake8``
+.. _black's recommendations regarding line length handling by flake8:
+    https://black.readthedocs.io/en/stable/the_black_code_style.html#line-length
+
+.. |pyenv| replace:: ``pyenv``
+.. _pyenv: https://github.com/pyenv/pyenv
+.. |poetry| replace:: ``poetry``
+.. _poetry: https://poetry.eustace.io
+.. |tox| replace:: ``tox``
+.. _tox: https://tox.readthedocs.io/en/latest/
+.. |tox-pyenv| replace:: ``tox-pyenv``
+.. _tox-pyenv: https://github.com/samstav/tox-pyenv
+
+.. |pytest| replace:: ``pytest``
+.. _pytest: http://pytest.org
+.. |behave| replace:: ``behave``
+.. _behave: https://behave.readthedocs.io/
+
+.. |black| replace:: ``black``
+.. _black: https://black.readthedocs.io/
+.. |blacken-docs| replace:: ``blacken-docs``
+.. _blacken-docs: https://github.com/asottile/blacken-docs
+.. |isort| replace:: ``isort``
+.. _isort: https://isort.readthedocs.io/
+.. |seed-isort-config| replace:: ``seed-isort-config``
+.. _seed-isort-config: https://github.com/asottile/seed-isort-config
+.. |flake8| replace:: ``flake8``
+.. _flake8: https://flake8.readthedocs.io/
+.. |flake8-bugbear| replace:: ``flake8-bugbear``
+.. _flake8-bugbear: https://github.com/PyCQA/flake8-bugbear
+.. |pylint| replace:: ``pylint``
+.. _pylint: https://pylint.readthedocs.io/
+.. |mypy| replace:: ``mypy``
+.. _mypy: https://mypy.readthedocs.io/
+.. |coverage| replace:: ``coverage``
+.. _coverage: https://coverage.readthedocs.io/
+.. |pyupgrade| replace:: ``pyupgrade``
+.. _pyupgrade: https://github.com/asottile/pyupgrade
+
+.. |python-semantic-release| replace:: ``python-semantic-release``
+.. _python-semantic-release: https://python-semantic-release.readthedocs.io/
+.. |commitizen| replace:: ``commitizen``
+.. _commitizen: https://woile.github.io/commitizen/
+.. |gitlint| replace:: ``gitlint``
+.. _gitlint: https://jorisroovers.github.io/gitlint/
+.. |pre-commit| replace:: ``pre-commit``
+.. _pre-commit: https://pre-commit.com
+
+.. |sphinx| replace:: ``sphinx``
+.. _sphinx: https://www.sphinx-doc.org/
+
+.. |gitlab-ci| replace:: ``gitlab-ci``
+.. _gitlab-ci: https://docs.gitlab.com/ce/ci/
+.. |travis-ci| replace:: ``travis-ci``
+.. _travis-ci: https://travis-ci.com
+.. |appveyor| replace:: ``appveyor``
+.. _appveyor: https://www.appveyor.com
