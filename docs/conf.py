@@ -179,7 +179,7 @@ if html_theme == "bootstrap":
 
 elif html_theme in ("default", "kr"):
     html_theme_path = ["_themes"]
-    html_logo = f"_static/{package_name}_logo1.png"
+    # html_logo = f"_static/{package_name}_logo1.png"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
