@@ -2,6 +2,14 @@ Tools
 =====
 
 .. note::
+    There are plenty of links hidden in the |inline literalls|__, as the theme used in
+    Read the Docs does not make them properly visible. So do not hesitate to click
+    away!
+
+.. |inline literalls| replace:: ``inline literalls``
+__ Tools_
+
+.. note::
     TO CHANGE:
 
     * video on tox
