@@ -1,5 +1,5 @@
-Full setup
-==========
+Step by step setup
+==================
 
 Environment setup
 -----------------

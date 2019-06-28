@@ -6,7 +6,8 @@ Searching for a Sane Python Library Development Environment
    :caption: Contents:
 
    intro
-   presentation
+   tools
+   approach
    setup
 
 

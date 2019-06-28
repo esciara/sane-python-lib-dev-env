@@ -1,5 +1,5 @@
-Tools and Approach
-==================
+Tools
+=====
 
 .. note::
     TO CHANGE:
@@ -12,18 +12,13 @@ Tools and Approach
     * Étienne Bersac's `Débuter avec Python en 2019`_
       (french), seen as a link from Sam (& Max)'s `Stack Python en 2019`_ (french)
 
-
-TL;DR: Tools used
------------------
-
 Python versions installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 * |pyenv|_: used to make available various python version on the same platform.
 
-
 Python dependencies, packaging, publishing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------
 
 * |poetry|_: preferred over ``pipenv`` or the combination of ``pip`` and ``setuptools``
 
@@ -33,104 +28,116 @@ Python dependencies, packaging, publishing
     * `Poetically Packaging Your Python Project`_
     * `A deeper look into Pipenv and Poetry`_
 
-
 Unused ``poetry`` features
-++++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* *Development dependencies* are only used to the bare minimum. (|tox|_, |tox-pyenv|_,
+* |dev-dependencies|_ are only used to the bare minimum. (|tox|_, |tox-pyenv|_,
   |commitizen|_ and |pre-commit|_) ``extras`` are used instead, alongside with
   |tox|_ for task management.
-* *Version bumping* feature is rather limited compared to what is already available
+* The |version bumping command|_ is rather limited compared to what is already available
   through |python-semantic-release|_.
 
+.. |dev-dependencies| replace:: ``dev-dependencies``
+.. _dev-dependencies:
+   https://poetry.eustace.io/docs/pyproject/#dependencies-and-dev-dependencies
+.. |version bumping command| replace:: ``version`` bumping command
+.. _version bumping command: https://poetry.eustace.io/docs/cli/#version
+
+https://poetry.eustace.io/docs/cli/#version
 
 Multi-environment testing (local) and task management
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------------------
 
 * |tox|_: (along with |tox-pyenv|_) will be handling running the tests and qa checks,
   except for ``pre-commit`` hooks.
 
 Testing suites
-~~~~~~~~~~~~~~
+--------------
 
 * |pytest|_: for unit testing.
 * |behave|_: for functional testing.
 
-
 QA Tools
-~~~~~~~~
+--------
 
 * |black|_: to end arguments about code formatting.
 * |isort|_: to sort import properly.
 * |flake8|_: for linting. It should be less and less needed thanks to ``black``.
 
-  * used in combination with |flake8-bugbear|_ to apply ``B950`` to follow |black's
+  * |flake8-bugbear|_ is used in combination to apply ``B950`` to follow |black's
     recommendations regarding line length handling by flake8|_.
 
 * |pylint|_: for (further) linting. (see note below)
 * |mypy|_: for static type checking.
 * |coverage|_ for code coverage.
 
-Some of these tools are called during the commit process `pre-commit hooks`_ and
-on-the-fly while developing through `IDE setup`_.
+.. note::
+    Some of these tools are called during the commit process `pre-commit hooks`_ and
+    on-the-fly while developing through `IDE setup`_.
 
 .. note::
     This `flake8 vs pylint reddit thread comment`_ catches succinctly the differences
     and advantages of using both ``flake8`` and ``pylint``.
 
-
-
 Versioning, change logs and commit messages readability
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------------
 
 * |python-semantic-release|_: to create the change logs and to bump versions following
-  semantic versioning rules
+  semantic versioning rules.
 * |commitizen|_: (the python package, not the javascript version) to create commit
-  comments which are readable.
-* |gitlint|_: to ensure that the commit comment effectively follow the semantic of
-  ``commitizen``.
+  massages, which are following the `Conventional Commit specification`_.
+* |gitlint|_: to ensure that the commit messages follow indeed the `Conventional Commit
+  specification`_. (WORK TO BE DONE)
 
+.. _Conventional Commit specification: https://www.conventionalcommits.org/
+
+Documentation
+-------------
+
+* |sphinx|_: to generate docs, which are then published online on `Read the docs`_.
 
 Continuous integration and continuous deployment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------------
 
 * |gitlab-ci|_: for local CI and release workflow.
 * |travis-ci|_: for PR checks on linux (and macOS ?).
 * |appveyor|_: for PR checks on windows.
 
-
 .. _pre-commit hooks:
 
 Ensuring quality though pre-commit hooks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
-* |pre-commit|_, the python tool, is used to set them up.
+* |pre-commit|_, the python tool, is used to setup the following hooks:
 
-Hooks used
-++++++++++
+  * pre-push hooks:
 
-* |gitlint|_
-* |black|_
-* |blacken-docs|_
-* |isort|_, helped wigth |seed-isort-config|_
-* some ``pre-commit`` packaged ``pre-commit-hooks``:
+    * |gitlint|_
 
-  * ``trailing-whitespace``
-  * ``end-of-file-fixer``
-  * ``check-yaml``
-  * ``debug-statements``
-  * ``flake8`` with ``flake8-bugbear``
+  * pre-commit hooks:
 
-* |pyupgrade|_
-* some ``pre-commit`` packaged ``pygrep-hooks``:
+    * |black|_
+    * |blacken-docs|_
+    * |isort|_, helped wigth |seed-isort-config|_
+    * some `out-of-the-box hooks for pre-commit
+      <https://github.com/pre-commit/pre-commit-hooks>`_:
 
-  * ``rst-backticks``
+      * ``trailing-whitespace``
+      * ``end-of-file-fixer``
+      * ``check-yaml``
+      * ``debug-statements``
+      * ``flake8`` with ``flake8-bugbear``
 
+    * |pyupgrade|_
+    * some `fast, cheap, regex based pre-commit hooks
+      <https://github.com/pre-commit/pygrep-hooks>`_:
+
+      * ``rst-backticks``
 
 .. _IDE setup:
 
 Ensuring on-the-fly QA though IDE setup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 My IDE of choice is Pycharm/Intellij IDEA. I know that Visual Studio Code is gaining momentum,
 but I am quite happy with the former.
@@ -141,21 +148,13 @@ but I am quite happy with the former.
   * |pylint PyCharm/Intellij IDEA integration|_.
   * |isort PyCharm/Intellij IDEA integration|_.
 
-
-
 Other useful IDE setup
-++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~
 
 You might find these other plugins useful:
 
 * `PyVenv Manage`_: provides a shortcut to manage the Python interpreter of
   Pycharm/Intellij IDEA projects.
-
-
-Documentation
-~~~~~~~~~~~~~
-
-* |sphinx|_: to generate docs, which are then published online on `Read the docs`_.
 
 
 .. |project-template-python| replace:: ``project-template-python``
