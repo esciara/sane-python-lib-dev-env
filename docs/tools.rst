@@ -1,3 +1,5 @@
+.. _tools:
+
 Tools
 =====
 
@@ -63,7 +65,7 @@ Testing suites
 --------------
 
 * |pytest|_: for unit testing.
-* |behave|_: for functional testing.
+* |behave|_: for functional (BDD) testing.
 
 QA Tools
 --------
@@ -90,14 +92,19 @@ QA Tools
 Versioning, change logs and commit messages readability
 -------------------------------------------------------
 
-* |python-semantic-release|_: to create the change logs and to bump versions following
-  semantic versioning rules.
+* |python-semantic-release|_: to create the change logs (based on commit messages
+  following the `Conventional Commit specification`_) and to bump versions following
+  `Semantic Versioning`_ rules.
 * |commitizen|_: (the python package, not the javascript version) to create commit
   massages, which are following the `Conventional Commit specification`_.
 * |gitlint|_: to ensure that the commit messages follow indeed the `Conventional Commit
-  specification`_. (WORK TO BE DONE)
+  specification`_. (This is not yet supported... need to write the code
+  for that, following the |gitlint User Defined Rules|_)
 
 .. _Conventional Commit specification: https://www.conventionalcommits.org/
+.. _Semantic Versioning: https://semver.org
+.. |gitlint User Defined Rules| replace:: ``gitlint`` User Defined Rules
+.. _gitlint User Defined Rules: https://jorisroovers.github.io/gitlint/user_defined_rules/
 
 Documentation
 -------------

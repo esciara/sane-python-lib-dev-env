@@ -1,29 +1,45 @@
 Step by step setup
 ==================
 
+Here are the different steps you need to do:
+
+* install ``pyenv``
+* install ``pyenv-virtualenv``: you will need it if you want to work on a version of
+  Python that is different from the default (or global in ``pyenv`` speak) system
+  version
+* set up your local (project)
+
+
 Environment setup
 -----------------
 
 Prerequisites
 ~~~~~~~~~~~~~
 
-Install ``pyenv`` and ``pyenv-virtualenv``
-++++++++++++++++++++++++++++++++++++++++++
+Install ``pyenv``
++++++++++++++++++
 
-First ``pyenv``: `install with Homebrew on macOS <https://github.com/pyenv/pyenv#homebrew-on-macos>`_
-(there are also `other installation method <https://github.com/pyenv/pyenv#installation>`_
-, which where not tested here)::
+First ``pyenv``: `install with Homebrew on macOS`_ (there are also |other pyenv
+installation method|_, which where not tested here)::
 
     # On macOS
     $ brew update
     $ brew install pyenv
 
-To allow be able to compile the python environnent with ``pyenv`` on Mac, you will have to install
-XCode command line tools. I installed them `from the developer connection <http://>`_ because of the following
-`XCode command line tools installation issues <http://>`_.
+.. _install with Homebrew on macOS: https://github.com/pyenv/pyenv#homebrew-on-macos
+.. |other pyenv installation method| replace:: other ``pyenv`` installation method
+.. _other pyenv installation method: method https://github.com/pyenv/pyenv#installation
+
+To allow be able to compile the python environnent with ``pyenv`` on Mac, you will have
+to install XCode command line tools. I installed them `from the developer connection`_
+because of the following `XCode command line tools installation issues`_.
+
+.. _from the developer connection: https://developer.apple.com/download/more/
+.. _XCode command line tools installation issues:
+   https://apple.stackexchange.com/questions/337744/installing-xcode-command-line-tools
 
 You will also have to remember to add the following exports on your profile (``bash`` in my case),
-otherwise you will get these `issues with pyenv's python compilation <http://>`_::
+otherwise you will get these |issues with pyenv's python compilation|_::
 
     $ echo 'export PATH="/usr/local/opt/openssl/bin:$PATH"' >> ~/.bash_profile
     $ echo 'export LDFLAGS="-L/usr/local/opt/openssl/lib -L/usr/local/opt/readline/lib"' >> ~/.bash_profile
@@ -32,25 +48,29 @@ otherwise you will get these `issues with pyenv's python compilation <http://>`_
 
     # Do not forget to restart your shell at some later stage to activate the changes (exec "$SHELL")
 
-We also add the auto-completion and other features (normally optional, the ``pyenv-virtualenv``
-`documantation <http://>`_ requires it)::
+.. |issues with pyenv's python compilation| replace::
+   issues with ``pyenv``'s python compilation
+.. _issues with pyenv's python compilation:
+   https://github.com/pyenv/pyenv/issues/1219
+
+We also add the auto-completion and other features (normally optional)::
 
     $ echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
 
     # Do not forget to restart your shell at some later stage to activate the changes (exec "$SHELL")
 
-.. warning::
-
-    Adding the auto-completion features of ``pyenv`` changes your ``PATH`` environment variable.
-    This is one of the reasons why installing ``tox`` with a ``brew install tox`` did not always
-    quite work as expected. (even though I ended up not using it as it does not contain ``tox``'s
-    latest version)
-
 If you have not done so already, restart your shell::
 
     $ exec "$SHELL"
 
-Install the versions of python you will want to work with::
+Install the different versions of Python you will want to test against
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Install all Python versions to be used
+++++++++++++++++++++++++++++++++++++++
+
+Install the versions of python you will want to work with (in our case we want to
+work with python ``3.6.8``, ``3.7.3`` and ``3.8-dev``)::
 
     $ pyenv install 3.6.8
     [..]
@@ -59,34 +79,17 @@ Install the versions of python you will want to work with::
     $ pyenv install 3.8-dev
     [..]
 
-Install ``pyenv-virtualenv`` following `the documentation <http://>`_ and add the auto-activations as requested in the
-doc::
+Make the different Python versions available to ``tox``
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    $ brew install pyenv-virtualenv
-    [..]
-    $ echo -e 'if which pyenv-virtualenv-init > /dev/null; then\n  eval "$(pyenv virtualenv-init -)"\nfi' >> ~/.bash_profile
+Make the desired Python versions globally available to ``tox``. The first named version
+will be the one used by default by ``poetry`` (if you want to use a different python
+version, you will have to use ``pyenv-virtualenv`` ::
 
-    # Do not forget to restart your shell at some later stage to activate the changes (exec "$SHELL")
-    $ exec "$SHELL"
+    $ pyenv global 3.6.8 3.7.3 3.8-dev
 
-Prepare your project's environment
-++++++++++++++++++++++++++++++++++
-
-Create a virtual environment for your project (here we are using python 3.6.8)::
-
-    $ cd path/to/my-project
-    $ pyenv virtualenv 3.6.8 my-project-3.6.8
-
-Set your newly create virtual env as your project's default env, and add the other python versions
-you will want ``tox`` to access to in the future::
-
-    $ pyenv local my-project-3.6.8 3.6.8 3.7.3 3.8-dev
-
-    # the current environment appears on the prompt
-    (my-project-3.6.8) $
-
-    (my-project-3.6.8) $ pyenv local
-    my-project-3.6.8
+    # the environments are not globally available
+    $ pyenv global
     3.6.8
     3.7.3
     3.8-dev

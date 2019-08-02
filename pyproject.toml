@@ -5,7 +5,7 @@ description = "An attempt to define tools and practices for a sane Python librar
 authors = ["Emmanuel Sciara <emmanuel.sciara@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.5"
 
 # Using a similar approach to `tox` (see `setup.cfg` and `tox.ini` files at https://github.com/tox-dev/tox)
 # and creating extras for use in `tox.ini` instead of using [tool.poetry.dev-dependencies]
